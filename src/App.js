@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import firebase from "firebase";
+import db from "./firebase";
 import {
   Typography,
   Button,
@@ -14,11 +16,21 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState("");
 
-  const classes = useStyles();
+  useEffect(() => {
+    db.collection("todos").onSnapshot((snapshot) => {
+      setTodos(snapshot.docs.map((doc) => doc.data().todo));
+    });
+  }, []);
 
   const handleSubmit = () => {
-    setTodos([...todos, input]);
+    db.collection("todos").add({
+      todo: input,
+    });
+
+    setInput("");
   };
+
+  const classes = useStyles();
 
   return (
     <div>
