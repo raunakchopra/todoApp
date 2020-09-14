@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
 import firebase from "firebase";
 import db from "./firebase";
-import {
-  Typography,
-  Button,
-  TextField,
-  ListItem,
-  ListItemText,
-  List,
-} from "@material-ui/core";
+import { Typography, Button, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import TodoSection from "./TodoSection";
 import "./App.css";
 
 function App() {
@@ -17,14 +11,19 @@ function App() {
   const [input, setInput] = useState("");
 
   useEffect(() => {
-    db.collection("todos").onSnapshot((snapshot) => {
-      setTodos(snapshot.docs.map((doc) => doc.data().todo));
-    });
+    db.collection("todos")
+      .orderBy("timeStamp", "desc")
+      .onSnapshot((snapshot) => {
+        setTodos(
+          snapshot.docs.map((doc) => ({ id: doc.id, todo: doc.data().todo }))
+        );
+      });
   }, []);
 
   const handleSubmit = () => {
     db.collection("todos").add({
       todo: input,
+      timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
 
     setInput("");
@@ -57,13 +56,7 @@ function App() {
           ADD TODO
         </Button>
       </div>
-      <List>
-        {todos.map((todo) => (
-          <ListItem>
-            <ListItemText primary={todo} />
-          </ListItem>
-        ))}
-      </List>
+      <TodoSection todoData={todos} />
     </div>
   );
 }
@@ -88,5 +81,8 @@ const useStyles = makeStyles({
   },
   listItemText: {
     fontSize: 20,
+  },
+  listContainer: {
+    marginTop: 40,
   },
 });

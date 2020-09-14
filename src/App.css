@@ -3,3 +3,13 @@
     justify-content: center;
     margin-top: 40px;
 }
+
+.listContainer {
+    display: flex;
+    margin-top: 40;
+}
+
+.closeIcon {
+    /* cursor: pointer; */
+    color: red;
+}
