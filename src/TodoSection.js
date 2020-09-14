@@ -8,6 +8,7 @@ import {
   IconButton,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
+import EditIcon from "@material-ui/icons/Edit";
 
 function TodoSection(props) {
   const todos = props.todoData;
@@ -30,6 +31,9 @@ function TodoSection(props) {
                       }
                     />
                   </IconButton>
+                  {/* <IconButton>
+                    <EditIcon fontSize="large" className="editIcon" />
+                  </IconButton> */}
                 </Typography>
               }
               inset={true}
